@@ -117,14 +117,14 @@ function pct(value: number, total: number) {
   return `${(value / total) * 100}%`;
 }
 
-function ScrollColumn({ column }: { column: Column }) {
+function ScrollColumn({ column, active }: { column: Column; active: boolean }) {
   const cycle = column.bands.reduce((sum, b) => sum + b.span, 0);
   // Two copies stacked make the translate loop seamless.
   const strip = [...column.bands, ...column.bands];
 
   return (
     <div
-      className="absolute overflow-hidden"
+      className={`absolute overflow-hidden ${active ? "sound-pulse" : ""}`}
       style={{
         left: pct(column.x, W),
         top: pct(column.y, H),
@@ -154,7 +154,7 @@ function ScrollColumn({ column }: { column: Column }) {
   );
 }
 
-export function CodeGrid() {
+export function CodeGrid({ activeColumn }: { activeColumn?: number | null }) {
   return (
     <div
       className="relative w-full max-w-[900px] blur-[0.4px]"
@@ -163,7 +163,7 @@ export function CodeGrid() {
       aria-label="Grid of coloured blocks spelling a message in Baudot telegraph code"
     >
       {COLUMNS.map((column, i) => (
-        <ScrollColumn key={i} column={column} />
+        <ScrollColumn key={i} column={column} active={activeColumn === i} />
       ))}
       {DASHES.map((d, i) => (
         <span
