@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { playing, toggle, bpm, setBpm, activeColumn, beat } =
+  const { playing, toggle, bpm, setBpm, activeColumn, beat, loading } =
     useStepSequencer();
 
   return (
@@ -41,6 +41,7 @@ function Index() {
         bpm={bpm}
         onBpmChange={setBpm}
         beat={beat}
+        loading={loading}
       />
       <Link
         to="/drip"
