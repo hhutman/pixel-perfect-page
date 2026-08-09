@@ -1,10 +1,5 @@
 # Pixel Perfect Page
 
-make a webpage that looks like this.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
 
 Continue developing this project in the [Lovable editor](https://lovable.dev/projects/028fccd2-6725-4b45-8048-034ad9625182).
 
