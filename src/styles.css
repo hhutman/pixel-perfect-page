@@ -181,3 +181,26 @@
 @utility block-in {
   animation: block-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
+
+@keyframes stripe-scroll {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+@utility stripe-scroll {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--block-grey) 0%,
+    var(--block-grey) 24.7%,
+    var(--block-black) 24.7%,
+    var(--block-black) 77.6%,
+    var(--block-grey) 77.6%,
+    var(--block-grey) 100%
+  );
+  background-size: 100% 100%;
+  animation: stripe-scroll 3.5s linear infinite;
+}
