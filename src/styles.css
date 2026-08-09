@@ -20,6 +20,18 @@
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
+  --color-canvas: var(--canvas);
+  --color-block-black: var(--block-black);
+  --color-block-grey: var(--block-grey);
+  --color-block-grey-light: var(--block-grey-light);
+  --color-block-grey-dark: var(--block-grey-dark);
+  --color-block-red: var(--block-red);
+  --color-block-red-deep: var(--block-red-deep);
+  --color-block-brown: var(--block-brown);
+  --color-block-brown-dark: var(--block-brown-dark);
+  --color-block-purple: var(--block-purple);
+  --color-block-olive: var(--block-olive);
+  --color-block-green: var(--block-green);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
