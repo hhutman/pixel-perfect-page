@@ -12,105 +12,105 @@ type Column = {
 };
 
 const W = 948;
-const H = 900;
+const H = 882;
 
-// Positions traced from the reference composition (Baudot-style code rows).
+// Positions traced pixel-for-pixel from the reference composition.
 const COLUMNS: Column[] = [
   {
     x: 277,
-    y: 163,
+    y: 162,
     w: 176,
-    h: 170,
+    h: 173,
     direction: "down",
     duration: 9,
     bands: [
-      { color: "bg-block-black", span: 34 },
-      { color: "bg-block-grey", span: 93 },
-      { color: "bg-block-black", span: 43 },
+      { color: "bg-block-black", span: 37 },
+      { color: "bg-block-grey", span: 86 },
+      { color: "bg-block-black", span: 50 },
     ],
   },
   {
     x: 541,
-    y: 163,
-    w: 88,
-    h: 170,
+    y: 162,
+    w: 90,
+    h: 173,
     direction: "up",
     duration: 6.5,
     bands: [
-      { color: "bg-block-grey", span: 42 },
-      { color: "bg-block-black", span: 90 },
-      { color: "bg-block-grey", span: 38 },
-    ],
-  },
-  {
-    x: 366,
-    y: 361,
-    w: 86,
-    h: 172,
-    direction: "down",
-    duration: 5,
-    bands: [
-      { color: "bg-block-grey-dark", span: 34 },
-      { color: "bg-block-grey-light", span: 88 },
-      { color: "bg-block-grey-dark", span: 50 },
-    ],
-  },
-  {
-    x: 277,
-    y: 588,
-    w: 88,
-    h: 172,
-    direction: "up",
-    duration: 11,
-    bands: [
-      { color: "bg-block-brown", span: 40 },
-      { color: "bg-block-red-deep", span: 92 },
-      { color: "bg-block-brown-dark", span: 40 },
-    ],
-  },
-  {
-    x: 541,
-    y: 588,
-    w: 88,
-    h: 172,
-    direction: "down",
-    duration: 7.5,
-    bands: [
-      { color: "bg-block-red", span: 40 },
-      { color: "bg-block-purple", span: 90 },
-      { color: "bg-block-red-deep", span: 42 },
-    ],
-  },
-  {
-    x: 277,
-    y: 787,
-    w: 88,
-    h: 113,
-    direction: "up",
-    duration: 8.5,
-    bands: [
-      { color: "bg-block-brown", span: 35 },
-      { color: "bg-block-green", span: 78 },
+      { color: "bg-block-grey", span: 47 },
+      { color: "bg-block-black", span: 86 },
+      { color: "bg-block-grey", span: 40 },
     ],
   },
   {
     x: 365,
-    y: 787,
+    y: 360,
+    w: 88,
+    h: 173,
+    direction: "down",
+    duration: 5,
+    bands: [
+      { color: "bg-block-grey-dark", span: 37 },
+      { color: "bg-block-grey-light", span: 85 },
+      { color: "bg-block-grey-darker", span: 51 },
+    ],
+  },
+  {
+    x: 275,
+    y: 587,
+    w: 92,
+    h: 176,
+    direction: "up",
+    duration: 11,
+    bands: [
+      { color: "bg-block-brown", span: 47 },
+      { color: "bg-block-red-deep", span: 84 },
+      { color: "bg-block-brown-dark", span: 45 },
+    ],
+  },
+  {
+    x: 539,
+    y: 587,
+    w: 92,
+    h: 176,
+    direction: "down",
+    duration: 7.5,
+    bands: [
+      { color: "bg-block-red", span: 40 },
+      { color: "bg-block-purple", span: 85 },
+      { color: "bg-block-red-deep", span: 51 },
+    ],
+  },
+  {
+    x: 275,
+    y: 784,
+    w: 92,
+    h: 98,
+    direction: "up",
+    duration: 8.5,
+    bands: [
+      { color: "bg-block-brown", span: 39 },
+      { color: "bg-block-green", span: 59 },
+    ],
+  },
+  {
+    x: 367,
+    y: 784,
     w: 176,
-    h: 113,
+    h: 98,
     direction: "down",
     duration: 12,
     bands: [
-      { color: "bg-block-olive", span: 35 },
-      { color: "bg-block-green", span: 78 },
+      { color: "bg-block-olive", span: 39 },
+      { color: "bg-block-green", span: 59 },
     ],
   },
 ];
 
 // Thin static dashes between the code rows.
 const DASHES = [
-  { x: 302, y: 551, w: 42, h: 12 },
-  { x: 389, y: 551, w: 130, h: 12 },
+  { x: 299, y: 552, w: 48, h: 15 },
+  { x: 388, y: 552, w: 134, h: 15 },
 ];
 
 function pct(value: number, total: number) {
