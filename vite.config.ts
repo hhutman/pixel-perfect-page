@@ -6,10 +6,27 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// GitHub Pages builds set VITE_BASE_PATH (e.g. "/my-repo/") and STATIC_EXPORT=true.
+// Locally and on Lovable hosting both are unset, so nothing changes.
+const basePath = process.env["VITE_BASE_PATH"] || "/";
+const staticExport = process.env["STATIC_EXPORT"] === "true";
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    ...(staticExport
+      ? {
+          prerender: {
+            enabled: true,
+            crawlLinks: true,
+          },
+          pages: [{ path: "/" }, { path: "/drip" }],
+        }
+      : {}),
+  },
+  vite: {
+    base: basePath,
   },
 });
