@@ -12,6 +12,8 @@ const basePath = process.env["VITE_BASE_PATH"] || "/";
 const staticExport = process.env["STATIC_EXPORT"] === "true";
 
 export default defineConfig({
+  // Static export (GitHub Pages) skips the server deploy target entirely.
+  ...(staticExport ? { nitro: false as const } : {}),
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
