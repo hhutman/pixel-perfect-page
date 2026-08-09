@@ -182,25 +182,28 @@
   animation: block-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-@keyframes stripe-scroll {
+@keyframes strip-up {
   from {
-    background-position: 0 0;
+    transform: translateY(0);
   }
   to {
-    background-position: 0 100%;
+    transform: translateY(-50%);
   }
 }
 
-@utility stripe-scroll {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    var(--block-grey) 0%,
-    var(--block-grey) 24.7%,
-    var(--block-black) 24.7%,
-    var(--block-black) 77.6%,
-    var(--block-grey) 77.6%,
-    var(--block-grey) 100%
-  );
-  background-size: 100% 50%;
-  animation: stripe-scroll 3.5s linear infinite;
+@keyframes strip-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@utility strip-up {
+  animation: strip-up var(--strip-duration, 8s) linear infinite;
+}
+
+@utility strip-down {
+  animation: strip-down var(--strip-duration, 8s) linear infinite;
 }
