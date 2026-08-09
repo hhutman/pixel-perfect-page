@@ -71,6 +71,12 @@ export function PaintDrip() {
       className="pointer-events-none absolute inset-0 overflow-hidden"
       aria-hidden="true"
     >
+      {/* Runs of paint hanging from the band. */}
+      <div className="absolute inset-x-0 top-[7vh] bottom-0">
+        {DRIPS.map((drip, i) => (
+          <DripStem key={i} drip={drip} />
+        ))}
+      </div>
       {/* Layered pink bands along the top edge, deepest first. */}
       <div className="paint-settle absolute inset-x-0 top-0" style={{ animationDelay: "0.25s" }}>
         <div className="h-[9vh] w-full bg-paint-pink-deep" />
@@ -112,12 +118,6 @@ export function PaintDrip() {
         </svg>
       </div>
 
-      {/* Runs of paint hanging from the band. */}
-      <div className="absolute inset-x-0 top-[7vh] bottom-0">
-        {DRIPS.map((drip, i) => (
-          <DripStem key={i} drip={drip} />
-        ))}
-      </div>
     </div>
   );
 }
