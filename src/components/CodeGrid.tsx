@@ -4,6 +4,7 @@ type Block = {
   w: number;
   h: number;
   color: string;
+  className?: string;
 };
 
 const W = 948;
@@ -15,10 +16,8 @@ const BLOCKS: Block[] = [
   { x: 277, y: 163, w: 176, h: 34, color: "bg-block-black" },
   { x: 277, y: 197, w: 176, h: 93, color: "bg-block-grey" },
   { x: 277, y: 290, w: 176, h: 43, color: "bg-block-black" },
-  // Row 1 — right group
-  { x: 541, y: 163, w: 88, h: 42, color: "bg-block-grey" },
-  { x: 541, y: 205, w: 88, h: 90, color: "bg-block-black" },
-  { x: 541, y: 295, w: 88, h: 38, color: "bg-block-grey" },
+  // Row 1 — right group: black/grey bands scrolling downward
+  { x: 541, y: 163, w: 88, h: 170, color: "", className: "stripe-scroll" },
   // Row 2 — centre column
   { x: 366, y: 361, w: 86, h: 34, color: "bg-block-grey-dark" },
   { x: 366, y: 395, w: 86, h: 88, color: "bg-block-grey-light" },
@@ -51,7 +50,7 @@ export function CodeGrid() {
       {BLOCKS.map((b, i) => (
         <span
           key={i}
-          className={`block-in absolute ${b.color}`}
+          className={`block-in absolute ${b.color} ${b.className ?? ""}`}
           style={{
             left: `${(b.x / W) * 100}%`,
             top: `${(b.y / H) * 100}%`,
