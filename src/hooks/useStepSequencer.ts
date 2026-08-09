@@ -68,7 +68,7 @@ export function useStepSequencer() {
         if (!buf) return 0;
         const ch = buf.getChannelData(0);
         for (let i = 0; i < ch.length; i++) {
-          if (Math.abs(ch[i]) > 0.02) return Math.max(0, i / buf.sampleRate - 0.01);
+          if (Math.abs(ch[i] ?? 0) > 0.02) return Math.max(0, i / buf.sampleRate - 0.01);
         }
         return 0;
       });
