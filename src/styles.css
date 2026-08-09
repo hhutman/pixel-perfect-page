@@ -20,6 +20,18 @@
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
+  --color-canvas: var(--canvas);
+  --color-block-black: var(--block-black);
+  --color-block-grey: var(--block-grey);
+  --color-block-grey-light: var(--block-grey-light);
+  --color-block-grey-dark: var(--block-grey-dark);
+  --color-block-red: var(--block-red);
+  --color-block-red-deep: var(--block-red-deep);
+  --color-block-brown: var(--block-brown);
+  --color-block-brown-dark: var(--block-brown-dark);
+  --color-block-purple: var(--block-purple);
+  --color-block-olive: var(--block-olive);
+  --color-block-green: var(--block-green);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
@@ -64,6 +76,18 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
+  --canvas: oklch(0.163 0.107 271.5);
+  --block-black: oklch(0.079 0.043 279);
+  --block-grey: oklch(0.53 0 0);
+  --block-grey-light: oklch(0.746 0 0);
+  --block-grey-dark: oklch(0.464 0 0);
+  --block-red: oklch(0.435 0.126 27.5);
+  --block-red-deep: oklch(0.415 0.129 28.5);
+  --block-brown: oklch(0.495 0.104 52);
+  --block-brown-dark: oklch(0.45 0.084 56);
+  --block-purple: oklch(0.28 0.086 300);
+  --block-olive: oklch(0.51 0.113 100);
+  --block-green: oklch(0.372 0.077 154);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
@@ -141,4 +165,19 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@keyframes block-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@utility block-in {
+  animation: block-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
