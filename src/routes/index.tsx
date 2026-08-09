@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { CodeGrid } from "@/components/CodeGrid";
 
 export const Route = createFileRoute("/")({
@@ -30,6 +30,12 @@ function Index() {
     <main className="flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
       <h1 className="sr-only">Baudot code block artwork</h1>
       <CodeGrid />
+      <Link
+        to="/drip"
+        className="absolute bottom-6 left-6 text-xs tracking-[0.3em] text-block-grey uppercase transition-opacity hover:opacity-60"
+      >
+        drip
+      </Link>
     </main>
   );
 }
