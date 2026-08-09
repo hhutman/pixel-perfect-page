@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
       <h1 className="sr-only">Baudot code block artwork</h1>
       <CodeGrid />
       <Link
