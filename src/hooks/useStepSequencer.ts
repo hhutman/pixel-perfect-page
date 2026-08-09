@@ -146,5 +146,5 @@ export function useStepSequencer() {
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
-  return { playing, toggle, bpm, setBpm, activeColumn, beat };
+  return { playing, toggle, bpm, setBpm, activeColumn, beat, loading };
 }
