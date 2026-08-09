@@ -253,3 +253,28 @@
     transform: none;
   }
 }
+
+@keyframes sound-pulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  35% {
+    transform: scale(1.06);
+    filter: brightness(1.9);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@utility sound-pulse {
+  animation: sound-pulse 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-pulse {
+    animation: none;
+  }
+}
