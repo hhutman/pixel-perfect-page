@@ -33,6 +33,10 @@
   --color-block-purple: var(--block-purple);
   --color-block-olive: var(--block-olive);
   --color-block-green: var(--block-green);
+  --color-paper: var(--paper);
+  --color-paint-pink-light: var(--paint-pink-light);
+  --color-paint-pink: var(--paint-pink);
+  --color-paint-pink-deep: var(--paint-pink-deep);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
@@ -90,6 +94,10 @@
   --block-olive: oklch(0.541 0.096 95.5);
   --block-green: oklch(0.355 0.068 152.7);
   --block-grey-darker: oklch(0.489 0 0);
+  --paper: oklch(0.985 0.002 90);
+  --paint-pink-light: oklch(0.885 0.062 5);
+  --paint-pink: oklch(0.775 0.148 3);
+  --paint-pink-deep: oklch(0.655 0.192 5);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
@@ -208,4 +216,40 @@
 
 @utility strip-down {
   animation: strip-down var(--strip-duration, 8s) linear infinite;
+}
+
+@keyframes drip-fall {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes paint-settle {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@utility drip-fall {
+  transform-origin: top center;
+  animation: drip-fall var(--drip-duration, 2s) cubic-bezier(0.32, 0, 0.3, 1)
+    var(--drip-delay, 0s) both;
+}
+
+@utility paint-settle {
+  animation: paint-settle 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drip-fall,
+  .paint-settle {
+    animation: none;
+    transform: none;
+  }
 }
