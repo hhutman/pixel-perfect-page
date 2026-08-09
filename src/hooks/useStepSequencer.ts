@@ -27,9 +27,12 @@ export function useStepSequencer() {
   const [bpm, setBpm] = useState(100);
   const [activeColumn, setActiveColumn] = useState<number | null>(null);
   const [beat, setBeat] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const ctxRef = useRef<AudioContext | null>(null);
   const buffersRef = useRef<(AudioBuffer | null)[]>([]);
+  const offsetsRef = useRef<number[]>([]);
+  const masterRef = useRef<GainNode | null>(null);
   const nextTimeRef = useRef(0);
   const beatRef = useRef(0);
   const bpmRef = useRef(bpm);
@@ -37,7 +40,8 @@ export function useStepSequencer() {
 
   bpmRef.current = bpm;
 
-  const ensureContext = useCallback(async () => {
+  // Created synchronously inside the click handler so browsers unlock audio.
+  const getContext = useCallback(() => {
     if (!ctxRef.current) {
       const Ctor =
         window.AudioContext ??
@@ -45,20 +49,41 @@ export function useStepSequencer() {
           .webkitAudioContext;
       const ctx = new Ctor();
       ctxRef.current = ctx;
-      buffersRef.current = await Promise.all(
+      const master = ctx.createGain();
+      master.gain.value = 2.5;
+      const comp = ctx.createDynamicsCompressor();
+      master.connect(comp).connect(ctx.destination);
+      masterRef.current = master;
+    }
+    void ctxRef.current.resume();
+    return ctxRef.current;
+  }, []);
+
+  const loadBuffers = useCallback(async (ctx: AudioContext) => {
+    if (buffersRef.current.length) return;
+    setLoading(true);
+    buffersRef.current = await Promise.all(
         COLUMN_SOUNDS.map(async (url) => {
           try {
             const res = await fetch(url);
             const data = await res.arrayBuffer();
             return await ctx.decodeAudioData(data);
-          } catch {
+          } catch (err) {
+            console.error("Could not load sound", url, err);
             return null;
           }
         }),
       );
-    }
-    if (ctxRef.current.state === "suspended") await ctxRef.current.resume();
-    return ctxRef.current;
+    // Skip any leading silence so every hit lands on the beat.
+    offsetsRef.current = buffersRef.current.map((buf) => {
+        if (!buf) return 0;
+        const ch = buf.getChannelData(0);
+        for (let i = 0; i < ch.length; i++) {
+          if (Math.abs(ch[i] ?? 0) > 0.02) return Math.max(0, i / buf.sampleRate - 0.01);
+        }
+        return 0;
+    });
+    setLoading(false);
   }, []);
 
   const stop = useCallback(() => {
@@ -69,10 +94,13 @@ export function useStepSequencer() {
   }, []);
 
   const start = useCallback(async () => {
-    const ctx = await ensureContext();
+    const ctx = getContext();
+    setPlaying(true);
+    await loadBuffers(ctx);
+    await ctx.resume();
     beatRef.current = 0;
     nextTimeRef.current = ctx.currentTime + 0.1;
-    setPlaying(true);
+    if (timerRef.current) clearInterval(timerRef.current);
 
     timerRef.current = setInterval(() => {
       const now = ctx.currentTime;
@@ -86,10 +114,15 @@ export function useStepSequencer() {
           const src = ctx.createBufferSource();
           src.buffer = buffer;
           const gain = ctx.createGain();
-          gain.gain.value = b === 0 ? 1 : 0.55;
-          src.connect(gain).connect(ctx.destination);
-          src.start(time);
-          src.stop(time + Math.min(buffer.duration, spb * 1.5));
+          const level = b === 0 ? 1 : 0.7;
+          const offset = offsetsRef.current[index] ?? 0;
+          const dur = Math.min(buffer.duration - offset, Math.max(spb * 2, 1.2));
+          gain.gain.setValueAtTime(level, time);
+          gain.gain.setValueAtTime(level, time + Math.max(0, dur - 0.08));
+          gain.gain.linearRampToValueAtTime(0.0001, time + dur);
+          src.connect(gain).connect(masterRef.current ?? ctx.destination);
+          src.start(time, offset);
+          src.stop(time + dur);
         }
         const delay = Math.max(0, (time - now) * 1000);
         setTimeout(() => {
@@ -102,7 +135,7 @@ export function useStepSequencer() {
         nextTimeRef.current += spb;
       }
     }, LOOKAHEAD_MS);
-  }, [ensureContext]);
+  }, [getContext, loadBuffers]);
 
   const toggle = useCallback(() => {
     if (playing) stop();
@@ -113,5 +146,5 @@ export function useStepSequencer() {
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
-  return { playing, toggle, bpm, setBpm, activeColumn, beat };
+  return { playing, toggle, bpm, setBpm, activeColumn, beat, loading };
 }

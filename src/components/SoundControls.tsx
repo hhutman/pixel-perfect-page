@@ -4,6 +4,7 @@ type Props = {
   bpm: number;
   onBpmChange: (value: number) => void;
   beat: number;
+  loading?: boolean;
 };
 
 export function SoundControls({
@@ -12,6 +13,7 @@ export function SoundControls({
   bpm,
   onBpmChange,
   beat,
+  loading,
 }: Props) {
   return (
     <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-5 text-xs tracking-[0.25em] text-block-grey uppercase">
@@ -21,7 +23,7 @@ export function SoundControls({
         className="border border-block-grey/40 px-4 py-2 transition-opacity hover:opacity-60"
         aria-pressed={playing}
       >
-        {playing ? "Pause" : "Play 5/4"}
+        {loading ? "Loading…" : playing ? "Pause" : "Play 5/4"}
       </button>
 
       <label className="flex items-center gap-3">
