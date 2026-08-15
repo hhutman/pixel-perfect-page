@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { CodeGrid } from "@/components/CodeGrid";
 import { SoundControls } from "@/components/SoundControls";
 import { DriftingSketches } from "@/components/DriftingSketches";
@@ -32,16 +31,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { playing, toggle, bpm, setBpm, activeColumn, beat, loading } =
     useStepSequencer();
-  const [toneOn, setToneOn] = useState(false);
-
-  useEffect(() => {
-    if (!playing) {
-      setToneOn(false);
-      return;
-    }
-    const id = window.setTimeout(() => setToneOn(true), 8000);
-    return () => window.clearTimeout(id);
-  }, [playing]);
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
@@ -67,7 +56,7 @@ function Index() {
       >
         tones
       </Link>
-      <DriftingSketches playing={playing} toneOn={toneOn} />
+      <DriftingSketches playing={playing} />
     </main>
   );
 }
