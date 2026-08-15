@@ -113,8 +113,7 @@ export function OscillatorSketch({
         className="w-full overflow-hidden [&>canvas]:block [&>canvas]:h-auto [&>canvas]:w-full"
       />
       {!hideControls && (
-why
-      <button
+        <button
         type="button"
         onClick={() => setSoundOn((s) => !s)}
         aria-pressed={soundOn}
