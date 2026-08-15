@@ -64,7 +64,7 @@ function Index() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
       <h1 className="sr-only">Baudot code block artwork</h1>
-      {playing && (
+      {sketchOn && (
         <div className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
           <div style={{ width: coverWidth }}>
             <OscillatorSketch
