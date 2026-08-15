@@ -56,12 +56,6 @@ export function OscillatorSketch({
         return o;
       });
 
-      const canvasRgb = getComputedStyle(document.documentElement)
-        .getPropertyValue('--canvas-rgb')
-        .trim()
-        .split(',')
-        .map((n) => parseInt(n.trim(), 10));
-
       const amps = [0, 0, 0];
       const targetAmps = [0, 0, 0];
       let lastRampTime = 0;
@@ -69,7 +63,8 @@ export function OscillatorSketch({
 
       const sketch = (p: InstanceType<typeof p5>) => {
         p.setup = () => {
-          p.createCanvas(825, 427, p.WEBGL);
+          const c = p.createCanvas(825, 427, p.WEBGL);
+          (c.elt as HTMLCanvasElement).style.background = 'transparent';
           p.noStroke();
         };
 
@@ -87,7 +82,7 @@ export function OscillatorSketch({
             g.gain.setTargetAtTime(level, ctx.currentTime, 0.05);
           }
 
-          p.background(canvasRgb[0]!, canvasRgb[1]!, canvasRgb[2]!);
+          p.clear();
 
           const colorvalue = 255 * amps[0]!;
           const colorvalue2 = 255 * amps[1]!;

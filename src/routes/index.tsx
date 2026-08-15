@@ -68,7 +68,7 @@ function Index() {
         tones
       </Link>
       {playing && (
-        <div className="animate-in fade-in fixed top-6 right-6 z-20 w-[380px] max-w-[45vw] overflow-hidden rounded border border-block-grey/50 bg-black/20 shadow-lg duration-700">
+        <div className="animate-in fade-in fixed top-6 right-6 z-20 w-[380px] max-w-[45vw] overflow-hidden duration-700">
           <OscillatorSketch
             width={380}
             height={197}
