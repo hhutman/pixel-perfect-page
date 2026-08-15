@@ -55,12 +55,14 @@ function Index() {
       >
         tones
       </Link>
-      <iframe
-        src="https://hhutman.github.io/NoObjectNoImageNoFocus1/"
-        title="No Object No Image No Focus"
-        className="absolute top-6 right-6 h-48 w-72 rounded border border-block-grey/30 bg-black/20 shadow-lg"
-        allow="fullscreen"
-      />
+      <div className="absolute top-6 right-6 h-48 w-72 overflow-hidden rounded border border-block-grey/30 bg-black/20 shadow-lg">
+        <iframe
+          src="https://hhutman.github.io/NoObjectNoImageNoFocus1/"
+          title="No Object No Image No Focus"
+          className="h-[427px] w-[825px] origin-top-right scale-[0.35]"
+          allow="fullscreen"
+        />
+      </div>
     </main>
   );
 }
