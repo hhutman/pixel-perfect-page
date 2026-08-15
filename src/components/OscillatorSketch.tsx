@@ -118,7 +118,7 @@ export function OscillatorSketch({
       <div
         ref={hostRef}
         style={{ maxWidth: W }}
-        className="w-full overflow-hidden [&>canvas]:block [&>canvas]:!h-auto [&>canvas]:!w-full"
+        className="w-full overflow-hidden [&>canvas]:block [&>canvas]:h-auto! [&>canvas]:w-full!"
       />
       {!hideControls && (
         <button
