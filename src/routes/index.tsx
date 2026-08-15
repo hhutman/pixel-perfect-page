@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CodeGrid } from "@/components/CodeGrid";
 import { SoundControls } from "@/components/SoundControls";
+import { OscillatorSketch } from "@/components/OscillatorSketch";
 import { useStepSequencer } from "@/hooks/useStepSequencer";
 
 export const Route = createFileRoute("/")({
