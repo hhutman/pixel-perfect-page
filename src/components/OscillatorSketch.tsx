@@ -100,8 +100,6 @@ export function OscillatorSketch({
 
           p.push();
           p.translate(-825 / 145, 0, 0);
-          p.rotateX(p.frameCount * 0.03);
-          p.rotateY(p.frameCount * 0.02);
           p.specularMaterial(440);
           p.ellipsoid(330, 135, 128);
           p.pop();
