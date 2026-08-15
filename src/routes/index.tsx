@@ -32,6 +32,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { playing, toggle, bpm, setBpm, activeColumn, beat, loading } =
     useStepSequencer();
+  const [sketchOn, setSketchOn] = useState(false);
   const [toneOn, setToneOn] = useState(false);
   const [size, setSize] = useState({ w: 1280, h: 800 });
 
@@ -45,11 +46,16 @@ function Index() {
 
   useEffect(() => {
     if (!playing) {
+      setSketchOn(false);
       setToneOn(false);
       return;
     }
-    const t = window.setTimeout(() => setToneOn(true), 6000);
-    return () => window.clearTimeout(t);
+    const sketchTimer = window.setTimeout(() => setSketchOn(true), 15000);
+    const toneTimer = window.setTimeout(() => setToneOn(true), 15000);
+    return () => {
+      window.clearTimeout(sketchTimer);
+      window.clearTimeout(toneTimer);
+    };
   }, [playing]);
 
   // Canvas keeps a fixed 825:427 aspect; widen it so it covers the viewport.
@@ -58,7 +64,7 @@ function Index() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
       <h1 className="sr-only">Baudot code block artwork</h1>
-      {playing && (
+      {sketchOn && (
         <div className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
           <div style={{ width: coverWidth }}>
             <OscillatorSketch
