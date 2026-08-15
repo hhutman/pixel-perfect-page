@@ -4,19 +4,29 @@ type OscillatorSketchProps = {
   width?: number;
   height?: number;
   hideControls?: boolean;
+  /** When provided, drives the tone instead of the internal Sound button. */
+  audible?: boolean;
 };
 
 export function OscillatorSketch({
   width = 825,
   height = 427,
   hideControls = false,
+  audible,
 }: OscillatorSketchProps) {
   const W = width;
   const H = height;
   const hostRef = useRef<HTMLDivElement | null>(null);
   const [soundOn, setSoundOn] = useState(false);
   const soundRef = useRef(false);
-  soundRef.current = soundOn;
+  soundRef.current = audible ?? soundOn;
+  const ctxRef = useRef<AudioContext | null>(null);
+
+  useEffect(() => {
+    if (audible && ctxRef.current?.state === "suspended") {
+      void ctxRef.current.resume();
+    }
+  }, [audible]);
 
   useEffect(() => {
     let cleanup = () => {};
@@ -32,6 +42,7 @@ export function OscillatorSketch({
         (window as unknown as { webkitAudioContext: typeof AudioContext })
           .webkitAudioContext;
       const ctx = new Ctor();
+      ctxRef.current = ctx;
       const base = 285;
       const gains = [0, 1, 2].map(() => ctx.createGain());
       const oscs = [0, 1, 2].map((i) => {
