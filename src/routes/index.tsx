@@ -59,7 +59,7 @@ function Index() {
         <iframe
           src="https://hhutman.github.io/NoObjectNoImageNoFocus1/"
           title="No Object No Image No Focus"
-          className="h-[427px] w-[825px] origin-top-right scale-[0.35]"
+          className="absolute right-0 top-0 h-[427px] w-[825px] origin-top-right scale-[0.35]"
           allow="fullscreen"
         />
       </div>
