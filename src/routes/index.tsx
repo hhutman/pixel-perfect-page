@@ -56,8 +56,8 @@ function Index() {
       >
         tones
       </Link>
-      <div className="absolute top-6 right-6 w-72 overflow-hidden rounded border border-block-grey/30 bg-black/20 shadow-lg">
-        <OscillatorSketch width={288} height={149} hideControls />
+      <div className="absolute top-6 right-6 z-20 w-[380px] max-w-[45vw] overflow-hidden rounded border border-block-grey/50 bg-black/20 shadow-lg">
+        <OscillatorSketch width={380} height={197} hideControls />
       </div>
     </main>
   );
