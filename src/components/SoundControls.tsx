@@ -16,7 +16,7 @@ export function SoundControls({
   loading,
 }: Props) {
   return (
-    <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-5 text-xs tracking-[0.25em] text-block-grey uppercase">
+    <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-5 text-xs tracking-[0.25em] text-block-grey uppercase">
       <button
         type="button"
         onClick={onToggle}
