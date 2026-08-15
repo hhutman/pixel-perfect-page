@@ -55,6 +55,12 @@ function Index() {
       >
         tones
       </Link>
+      <iframe
+        src="https://hhutman.github.io/NoObjectNoImageNoFocus1/"
+        title="No Object No Image No Focus"
+        className="absolute top-6 right-6 h-48 w-72 rounded border border-block-grey/30 bg-black/20 shadow-lg"
+        allow="fullscreen"
+      />
     </main>
   );
 }
