@@ -63,7 +63,8 @@ export function OscillatorSketch({
 
       const sketch = (p: InstanceType<typeof p5>) => {
         p.setup = () => {
-          p.createCanvas(W, H, p.WEBGL);
+          p.createCanvas(825, 427, p.WEBGL);
+          p.noStroke();
         };
 
         p.draw = () => {
@@ -90,14 +91,10 @@ export function OscillatorSketch({
           p.pointLight(colorvalue, 0, colorvalue2, 0, 0, 180);
 
           p.push();
-          p.translate(-W / 145, 0, 0);
+          p.translate(-825 / 145, 0, 0);
           p.rotateX(p.frameCount * 0.03);
           p.specularMaterial(440);
-          p.ellipsoid(
-            (245 * W) / 825,
-            (100 * H) / 427,
-            (95 * W) / 825,
-          );
+          p.ellipsoid(245, 100, 95);
           p.pop();
         };
       };
@@ -121,7 +118,7 @@ export function OscillatorSketch({
       <div
         ref={hostRef}
         style={{ maxWidth: W }}
-        className="w-full overflow-hidden [&>canvas]:block [&>canvas]:h-auto [&>canvas]:w-full"
+        className="w-full overflow-hidden [&>canvas]:block [&>canvas]:h-auto! [&>canvas]:w-full!"
       />
       {!hideControls && (
         <button
