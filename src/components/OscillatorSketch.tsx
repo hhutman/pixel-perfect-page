@@ -42,6 +42,7 @@ export function OscillatorSketch({
         (window as unknown as { webkitAudioContext: typeof AudioContext })
           .webkitAudioContext;
       const ctx = new Ctor();
+      ctxRef.current = ctx;
       const base = 285;
       const gains = [0, 1, 2].map(() => ctx.createGain());
       const oscs = [0, 1, 2].map((i) => {
