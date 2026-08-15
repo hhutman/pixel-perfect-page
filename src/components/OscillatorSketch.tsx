@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
-const W = 825;
-const H = 427;
+type OscillatorSketchProps = {
+  width?: number;
+  height?: number;
+  hideControls?: boolean;
+};
 
-export function OscillatorSketch() {
+export function OscillatorSketch({
+  width = 825,
+  height = 427,
+  hideControls = false,
+}: OscillatorSketchProps) {
+  const W = width;
+  const H = height;
   const hostRef = useRef<HTMLDivElement | null>(null);
   const [soundOn, setSoundOn] = useState(false);
   const soundRef = useRef(false);
@@ -73,7 +82,11 @@ export function OscillatorSketch() {
           p.translate(-W / 145, 0, 0);
           p.rotateX(p.frameCount * 0.03);
           p.specularMaterial(440);
-          p.ellipsoid(245, 100, 95);
+          p.ellipsoid(
+            (245 * W) / 825,
+            (100 * H) / 427,
+            (95 * W) / 825,
+          );
           p.pop();
         };
       };
@@ -90,14 +103,17 @@ export function OscillatorSketch() {
       cancelled = true;
       cleanup();
     };
-  }, []);
+  }, [W, H]);
 
   return (
     <div className="flex flex-col items-center gap-5">
       <div
         ref={hostRef}
-        className="w-full max-w-[825px] overflow-hidden [&>canvas]:block [&>canvas]:h-auto [&>canvas]:w-full"
+        style={{ maxWidth: W }}
+        className="w-full overflow-hidden [&>canvas]:block [&>canvas]:h-auto [&>canvas]:w-full"
       />
+      {!hideControls && (
+why
       <button
         type="button"
         onClick={() => setSoundOn((s) => !s)}
@@ -106,6 +122,7 @@ export function OscillatorSketch() {
       >
         {soundOn ? "Sound off" : "Sound on"}
       </button>
+      )}
     </div>
   );
 }
