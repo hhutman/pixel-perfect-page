@@ -93,9 +93,7 @@ export function OscillatorSketch({
           p.push();
           p.translate(-825 / 145, 0, 0);
           p.rotateX(p.frameCount * 0.03);
-          p.ambientMaterial(255);
-          p.specularMaterial(255);
-          p.shininess(15);
+          p.specularMaterial(440);
           p.ellipsoid(245, 100, 95);
           p.pop();
         };
