@@ -73,16 +73,14 @@ function Index() {
       <div className="relative z-10">
         <CodeGrid activeColumn={activeColumn} />
       </div>
-      <div className="relative z-10">
-        <SoundControls
-          playing={playing}
-          onToggle={toggle}
-          bpm={bpm}
-          onBpmChange={setBpm}
-          beat={beat}
-          loading={loading}
-        />
-      </div>
+      <SoundControls
+        playing={playing}
+        onToggle={toggle}
+        bpm={bpm}
+        onBpmChange={setBpm}
+        beat={beat}
+        loading={loading}
+      />
       <Link
         to="/drip"
         className="absolute bottom-6 left-6 z-10 text-xs tracking-[0.3em] text-block-grey uppercase transition-opacity hover:opacity-60"
