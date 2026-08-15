@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { CodeGrid } from "@/components/CodeGrid";
 import { SoundControls } from "@/components/SoundControls";
 import { OscillatorSketch } from "@/components/OscillatorSketch";
@@ -31,6 +32,16 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { playing, toggle, bpm, setBpm, activeColumn, beat, loading } =
     useStepSequencer();
+  const [toneOn, setToneOn] = useState(false);
+
+  useEffect(() => {
+    if (!playing) {
+      setToneOn(false);
+      return;
+    }
+    const id = window.setTimeout(() => setToneOn(true), 8000);
+    return () => window.clearTimeout(id);
+  }, [playing]);
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-canvas px-4">
@@ -56,9 +67,16 @@ function Index() {
       >
         tones
       </Link>
-      <div className="absolute top-6 right-6 z-20 w-[380px] max-w-[45vw] overflow-hidden rounded border border-block-grey/50 bg-black/20 shadow-lg">
-        <OscillatorSketch width={380} height={197} hideControls />
-      </div>
+      {playing && (
+        <div className="animate-in fade-in absolute top-6 right-6 z-20 w-[380px] max-w-[45vw] overflow-hidden rounded border border-block-grey/50 bg-black/20 shadow-lg duration-700">
+          <OscillatorSketch
+            width={380}
+            height={197}
+            hideControls
+            audible={toneOn}
+          />
+        </div>
+      )}
     </main>
   );
 }
