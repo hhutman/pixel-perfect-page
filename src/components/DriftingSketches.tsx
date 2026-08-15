@@ -1,127 +1,80 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { OscillatorSketch } from "./OscillatorSketch";
 
-type Item = {
-  id: number;
-  x: number;
-  y: number;
-  width: number;
-  leaving: boolean;
-};
-
-const MAX = 5;
-const LIFETIME_MS = 6000;
+const COUNT = 5;
+const STAGGER_MS = 1500;
+const TONE_DELAY_MS = 6000;
 const FADE_MS = 700;
 
-/** Reserved central box (the block artwork) that sketches must not cover. */
-function pickSpot(width: number) {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const h = width * 0.52;
-  const reservedW = Math.min(vw * 0.42, 460);
-  const reservedH = Math.min(vh * 0.92, 900);
-  const rx = (vw - reservedW) / 2;
-  const ry = (vh - reservedH) / 2;
+function Slot({ width }: { width: number }) {
+  const [visible, setVisible] = useState(false);
+  const [audible, setAudible] = useState(false);
 
-  const bands = [
-    { x: [8, Math.max(8, rx - width)], y: [8, Math.max(8, vh - h - 8)] }, // left
-    { x: [rx + reservedW, Math.max(rx + reservedW, vw - width - 8)], y: [8, Math.max(8, vh - h - 8)] }, // right
-    { x: [8, Math.max(8, vw - width - 8)], y: [8, Math.max(8, ry - h)] }, // top
-    { x: [8, Math.max(8, vw - width - 8)], y: [Math.min(vh - h - 8, ry + reservedH), Math.max(8, vh - h - 8)] }, // bottom
-  ].filter((b) => b.x[1]! >= b.x[0]! && b.y[1]! >= b.y[0]!);
+  useEffect(() => {
+    const a = window.setTimeout(() => setVisible(true), 20);
+    const b = window.setTimeout(() => setAudible(true), TONE_DELAY_MS);
+    return () => {
+      window.clearTimeout(a);
+      window.clearTimeout(b);
+    };
+  }, []);
 
-  const band = bands[Math.floor(Math.random() * bands.length)] ?? bands[0];
-  if (!band) return { x: 8, y: 8 };
-  const rand = (a: number, b: number) => a + Math.random() * Math.max(0, b - a);
-  return { x: rand(band.x[0]!, band.x[1]!), y: rand(band.y[0]!, band.y[1]!) };
+  return (
+    <div
+      className="pointer-events-none transition-all ease-out"
+      style={{
+        width,
+        transitionDuration: `${FADE_MS}ms`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "scale(1)" : "scale(0.94)",
+      }}
+    >
+      <OscillatorSketch
+        width={width}
+        height={width * 0.52}
+        hideControls
+        audible={audible}
+        volume={0.12}
+      />
+    </div>
+  );
 }
 
-export function DriftingSketches({
-  playing,
-  toneOn,
-}: {
-  playing: boolean;
-  toneOn: boolean;
-}) {
-  const [items, setItems] = useState<Item[]>([]);
-  const idRef = useRef(0);
+export function DriftingSketches({ playing }: { playing: boolean }) {
+  const [count, setCount] = useState(0);
+  const [width, setWidth] = useState(300);
+
+  useEffect(() => {
+    const measure = () => {
+      const byHeight = (window.innerHeight - 40) / COUNT / 0.52;
+      setWidth(Math.max(140, Math.min(340, window.innerWidth * 0.32, byHeight)));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
 
   useEffect(() => {
     if (!playing) {
-      setItems([]);
+      setCount(0);
       return;
     }
-
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    const spawn = () => {
-      const width = 240 + Math.random() * 140;
-      const { x, y } = pickSpot(width);
-      const id = ++idRef.current;
-      setItems((prev) =>
-        prev.length >= MAX ? prev : [...prev, { id, x, y, width, leaving: false }],
-      );
+    const timers: number[] = [];
+    for (let i = 0; i < COUNT; i++) {
       timers.push(
-        setTimeout(() => {
-          setItems((prev) =>
-            prev.map((it) => (it.id === id ? { ...it, leaving: true } : it)),
-          );
-          timers.push(
-            setTimeout(
-              () => setItems((prev) => prev.filter((it) => it.id !== id)),
-              FADE_MS,
-            ),
-          );
-        }, LIFETIME_MS),
+        window.setTimeout(() => setCount((c) => Math.max(c, i + 1)), i * STAGGER_MS),
       );
-    };
-
-    spawn();
-    let cancelled = false;
-    const queue = () => {
-      const delay = 4000 + Math.random() * 2000;
-      timers.push(
-        setTimeout(() => {
-          if (cancelled) return;
-          spawn();
-          queue();
-        }, delay),
-      );
-    };
-    queue();
-
-    return () => {
-      cancelled = true;
-      timers.forEach(clearTimeout);
-    };
+    }
+    return () => timers.forEach((t) => window.clearTimeout(t));
   }, [playing]);
 
   if (!playing) return null;
 
   return (
-    <>
-      {items.map((it) => (
-        <div
-          key={it.id}
-          className="pointer-events-none fixed z-20 transition-all ease-out"
-          style={{
-            left: it.x,
-            top: it.y,
-            width: it.width,
-            transitionDuration: `${FADE_MS}ms`,
-            opacity: it.leaving ? 0 : 1,
-            transform: it.leaving ? "scale(0.94)" : "scale(1)",
-          }}
-        >
-          <OscillatorSketch
-            width={it.width}
-            height={it.width * 0.52}
-            hideControls
-            audible={toneOn && !it.leaving}
-            volume={0.12}
-          />
-        </div>
+    <div className="pointer-events-none fixed right-2 top-1/2 z-20 flex -translate-y-1/2 flex-col items-end gap-1">
+      {Array.from({ length: count }, (_, i) => (
+        <Slot key={i} width={width} />
       ))}
-    </>
+    </div>
   );
 }
