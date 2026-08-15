@@ -62,11 +62,6 @@ export function OscillatorSketch({
       const rampDuration = 1;
 
       const sketch = (p: InstanceType<typeof p5>) => {
-        const light = p as unknown as {
-          directionalLight: (...args: number[]) => void;
-          pointLight: (...args: number[]) => void;
-        };
-
         p.setup = () => {
           p.createCanvas(825, 427, p.WEBGL);
           p.noStroke();
@@ -92,8 +87,8 @@ export function OscillatorSketch({
           const colorvalue2 = 255 * amps[1]!;
 
           p.ambientLight(50);
-          light.directionalLight(137, 0);
-          light.pointLight(colorvalue, 0, colorvalue2, 180);
+          p.directionalLight(137, 0, 0, 0, 0, -1);
+          p.pointLight(colorvalue, 0, colorvalue2, 0, 0, 180);
 
           p.push();
           p.translate(-825 / 145, 0, 0);
