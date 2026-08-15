@@ -47,7 +47,7 @@ export function DriftingSketches({ playing }: { playing: boolean }) {
   useEffect(() => {
     const measure = () => {
       const byHeight = (window.innerHeight - 40) / COUNT / 0.52;
-      setWidth(Math.max(140, Math.min(340, window.innerWidth * 0.32, byHeight)));
+      setWidth(Math.max(180, Math.min(440, window.innerWidth * 0.42, byHeight)));
     };
     measure();
     window.addEventListener("resize", measure);

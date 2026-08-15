@@ -76,15 +76,17 @@ export function OscillatorSketch({
         p.draw = () => {
           if (p.millis() - lastRampTime > rampDuration * 1000) {
             const i = Math.floor(p.random(3));
-            targetAmps[i] = p.random(0.1, 0.5);
+            targetAmps[i] = p.random(0.2, 1.0);
+            const second = Math.floor(p.random(3));
+            if (second !== i) targetAmps[second] = p.random(0.1, 0.5);
             lastRampTime = p.millis();
           }
 
           for (let i = 0; i < amps.length; i++) {
-            amps[i]! += (targetAmps[i]! - amps[i]!) * 0.01;
+            amps[i]! += (targetAmps[i]! - amps[i]!) * 0.03;
             const g = gains[i]!;
             const level = soundRef.current ? amps[i]! * volumeRef.current : 0;
-            g.gain.setTargetAtTime(level, ctx.currentTime, 0.05);
+            g.gain.setTargetAtTime(level, ctx.currentTime, 0.03);
           }
 
           p.clear();
@@ -92,15 +94,16 @@ export function OscillatorSketch({
           const colorvalue = 255 * amps[0]!;
           const colorvalue2 = 255 * amps[1]!;
 
-          p.ambientLight(50);
+          p.ambientLight(40 + colorvalue * 0.15);
           p.directionalLight(137, 0, 0, 0, 0, -1);
           p.pointLight(colorvalue, 0, colorvalue2, 0, 0, 180);
 
           p.push();
           p.translate(-825 / 145, 0, 0);
           p.rotateX(p.frameCount * 0.03);
+          p.rotateY(p.frameCount * 0.02);
           p.specularMaterial(440);
-          p.ellipsoid(245, 100, 95);
+          p.ellipsoid(330, 135, 128);
           p.pop();
         };
       };
