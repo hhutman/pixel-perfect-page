@@ -93,11 +93,10 @@ export function OscillatorSketch({
 
           const colorvalue = 255 * amps[0]!;
           const colorvalue2 = 255 * amps[1]!;
-          const colorvalue3 = 255 * amps[2]!;
 
-          p.ambientLight(30 + colorvalue3 * 0.25);
-          p.directionalLight(200 + colorvalue, 40, 40, 0, 0, -1);
-          p.pointLight(colorvalue, colorvalue3 * 0.6, colorvalue2, 0, 0, 220);
+          p.ambientLight(40 + colorvalue * 0.15);
+          p.directionalLight(137, 0, 0, 0, 0, -1);
+          p.pointLight(colorvalue, 0, colorvalue2, 0, 0, 180);
 
           p.push();
           p.translate(-825 / 145, 0, 0);
