@@ -62,8 +62,14 @@ export function OscillatorSketch({
       const rampDuration = 1;
 
       const sketch = (p: InstanceType<typeof p5>) => {
+        const light = p as unknown as {
+          directionalLight: (...args: number[]) => void;
+          pointLight: (...args: number[]) => void;
+        };
+
         p.setup = () => {
-          p.createCanvas(W, H, p.WEBGL);
+          p.createCanvas(825, 427, p.WEBGL);
+          p.noStroke();
         };
 
         p.draw = () => {
@@ -86,18 +92,14 @@ export function OscillatorSketch({
           const colorvalue2 = 255 * amps[1]!;
 
           p.ambientLight(50);
-          p.directionalLight(137, 0, 0, 0, 0, -1);
-          p.pointLight(colorvalue, 0, colorvalue2, 0, 0, 180);
+          light.directionalLight(137, 0);
+          light.pointLight(colorvalue, 0, colorvalue2, 180);
 
           p.push();
-          p.translate(-W / 145, 0, 0);
+          p.translate(-825 / 145, 0, 0);
           p.rotateX(p.frameCount * 0.03);
           p.specularMaterial(440);
-          p.ellipsoid(
-            (245 * W) / 825,
-            (100 * H) / 427,
-            (95 * W) / 825,
-          );
+          p.ellipsoid(245, 100, 95);
           p.pop();
         };
       };
