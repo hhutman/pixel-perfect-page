@@ -82,6 +82,7 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --canvas: oklch(0.151 0.096 264.2);
+  --canvas-rgb: 2, 17, 41;
   --block-black: oklch(0.086 0.055 273.7);
   --block-grey: oklch(0.549 0 0);
   --block-grey-light: oklch(0.754 0 0);

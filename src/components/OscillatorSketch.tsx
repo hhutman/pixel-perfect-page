@@ -56,6 +56,12 @@ export function OscillatorSketch({
         return o;
       });
 
+      const canvasRgb = getComputedStyle(document.documentElement)
+        .getPropertyValue('--canvas-rgb')
+        .trim()
+        .split(',')
+        .map((n) => parseInt(n.trim(), 10));
+
       const amps = [0, 0, 0];
       const targetAmps = [0, 0, 0];
       let lastRampTime = 0;
@@ -81,7 +87,7 @@ export function OscillatorSketch({
             g.gain.setTargetAtTime(level, ctx.currentTime, 0.05);
           }
 
-          p.background(40, 40, 40);
+          p.background(canvasRgb[0]!, canvasRgb[1]!, canvasRgb[2]!);
 
           const colorvalue = 255 * amps[0]!;
           const colorvalue2 = 255 * amps[1]!;
