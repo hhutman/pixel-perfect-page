@@ -87,7 +87,7 @@ export function OscillatorSketch({
             g.gain.setTargetAtTime(level, ctx.currentTime, 0.05);
           }
 
-          p.background(40, 40, 40);
+          p.background(canvasRgb[0]!, canvasRgb[1]!, canvasRgb[2]!);
 
           const colorvalue = 255 * amps[0]!;
           const colorvalue2 = 255 * amps[1]!;
