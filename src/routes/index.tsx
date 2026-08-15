@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CodeGrid } from "@/components/CodeGrid";
 import { SoundControls } from "@/components/SoundControls";
-import { OscillatorSketch } from "@/components/OscillatorSketch";
+import { DriftingSketches } from "@/components/DriftingSketches";
 import { useStepSequencer } from "@/hooks/useStepSequencer";
 
 export const Route = createFileRoute("/")({
@@ -67,16 +67,7 @@ function Index() {
       >
         tones
       </Link>
-      {playing && (
-        <div className="animate-in fade-in fixed top-6 right-6 z-20 w-[380px] max-w-[45vw] overflow-hidden duration-700">
-          <OscillatorSketch
-            width={380}
-            height={197}
-            hideControls
-            audible={toneOn}
-          />
-        </div>
-      )}
+      <DriftingSketches playing={playing} toneOn={toneOn} />
     </main>
   );
 }

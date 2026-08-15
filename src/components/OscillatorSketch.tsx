@@ -6,6 +6,8 @@ type OscillatorSketchProps = {
   hideControls?: boolean;
   /** When provided, drives the tone instead of the internal Sound button. */
   audible?: boolean;
+  /** Peak gain multiplier for the tone. */
+  volume?: number;
 };
 
 export function OscillatorSketch({
@@ -13,6 +15,7 @@ export function OscillatorSketch({
   height = 427,
   hideControls = false,
   audible,
+  volume = 0.4,
 }: OscillatorSketchProps) {
   const W = width;
   const H = height;
@@ -20,6 +23,8 @@ export function OscillatorSketch({
   const [soundOn, setSoundOn] = useState(false);
   const soundRef = useRef(false);
   soundRef.current = audible ?? soundOn;
+  const volumeRef = useRef(volume);
+  volumeRef.current = volume;
   const ctxRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
@@ -78,7 +83,7 @@ export function OscillatorSketch({
           for (let i = 0; i < amps.length; i++) {
             amps[i]! += (targetAmps[i]! - amps[i]!) * 0.01;
             const g = gains[i]!;
-            const level = soundRef.current ? amps[i]! * 0.4 : 0;
+            const level = soundRef.current ? amps[i]! * volumeRef.current : 0;
             g.gain.setTargetAtTime(level, ctx.currentTime, 0.05);
           }
 
