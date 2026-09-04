@@ -62,7 +62,7 @@ function Index() {
   const coverWidth = Math.max(size.w, (size.h * 825) / 427);
 
   return (
-    <main className="relative flex min-h-screen items-start justify-center overflow-hidden bg-canvas px-4 pt-[8vh]">
+    <main className="relative flex min-h-screen items-start justify-center overflow-hidden bg-canvas px-4 pt-[2vh]">
       <h1 className="sr-only">Baudot code block artwork</h1>
       {sketchOn && (
         <div className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center">
