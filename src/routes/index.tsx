@@ -88,12 +88,6 @@ function Index() {
         loading={loading}
       />
       <Link
-        to="/drip"
-        className="absolute bottom-6 left-6 z-10 text-xs tracking-[0.3em] text-block-grey uppercase transition-opacity hover:opacity-60"
-      >
-        drip
-      </Link>
-      <Link
         to="/tones"
         className="absolute bottom-6 right-6 z-10 text-xs tracking-[0.3em] text-block-grey uppercase transition-opacity hover:opacity-60"
       >

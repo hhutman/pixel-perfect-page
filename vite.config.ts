@@ -24,7 +24,7 @@ export default defineConfig({
             enabled: true,
             crawlLinks: true,
           },
-          pages: [{ path: "/" }, { path: "/drip" }],
+          pages: [{ path: "/" }],
         }
       : {}),
   },

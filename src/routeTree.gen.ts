@@ -10,17 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DripRouteImport } from './routes/drip'
 import { Route as TonesRouteImport } from './routes/tones'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DripRoute = DripRouteImport.update({
-  id: '/drip',
-  path: '/drip',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TonesRoute = TonesRouteImport.update({
@@ -31,31 +25,27 @@ const TonesRoute = TonesRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/drip': typeof DripRoute
   '/tones': typeof TonesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/drip': typeof DripRoute
   '/tones': typeof TonesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/drip': typeof DripRoute
   '/tones': typeof TonesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/drip' | '/tones'
+  fullPaths: '/' | '/tones'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/drip' | '/tones'
-  id: '__root__' | '/' | '/drip' | '/tones'
+  to: '/' | '/tones'
+  id: '__root__' | '/' | '/tones'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DripRoute: typeof DripRoute
   TonesRoute: typeof TonesRoute
 }
 
@@ -66,13 +56,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/drip': {
-      id: '/drip'
-      path: '/drip'
-      fullPath: '/drip'
-      preLoaderRoute: typeof DripRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tones': {
@@ -87,7 +70,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DripRoute: DripRoute,
   TonesRoute: TonesRoute,
 }
 export const routeTree = rootRouteImport
