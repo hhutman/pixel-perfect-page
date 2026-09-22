@@ -33,6 +33,8 @@ export function useStepSequencer() {
   const beatRef = useRef(0);
   const bpmRef = useRef(bpm);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const interludeBufferRef = useRef<AudioBuffer | null>(null);
+  const interludeSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
   bpmRef.current = bpm;
 
