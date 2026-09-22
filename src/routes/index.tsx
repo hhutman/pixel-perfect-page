@@ -34,6 +34,8 @@ function Index() {
     useStepSequencer();
   const [sketchOn, setSketchOn] = useState(false);
   const [toneOn, setToneOn] = useState(false);
+  const [showPause, setShowPause] = useState(false);
+  const [pauseFading, setPauseFading] = useState(false);
   const [size, setSize] = useState({ w: 1280, h: 800 });
 
   useEffect(() => {
@@ -48,6 +50,8 @@ function Index() {
     if (!playing) {
       setSketchOn(false);
       setToneOn(false);
+      setShowPause(false);
+      setPauseFading(false);
       return;
     }
     const sketchTimer = window.setTimeout(() => setSketchOn(true), 15000);
@@ -57,6 +61,23 @@ function Index() {
       window.clearTimeout(toneTimer);
     };
   }, [playing]);
+
+  // Big block-letter PAUSE button appears 13s after the tone begins.
+  useEffect(() => {
+    if (!toneOn) {
+      setShowPause(false);
+      setPauseFading(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setShowPause(true), 13000);
+    return () => window.clearTimeout(timer);
+  }, [toneOn]);
+
+  const handleBigPause = () => {
+    setPauseFading(true);
+    window.setTimeout(() => setShowPause(false), 350);
+    toggle();
+  };
 
   // Canvas keeps a fixed 825:427 aspect; widen it so it covers the viewport.
   const coverWidth = Math.max(size.w, (size.h * 825) / 427);
@@ -88,6 +109,20 @@ function Index() {
         beat={beat}
         loading={loading}
       />
+      {showPause && (
+        <button
+          type="button"
+          onClick={handleBigPause}
+          className={`fixed inset-0 z-20 flex items-center justify-center transition-opacity duration-300 ${
+            pauseFading ? "opacity-0" : "opacity-100"
+          }`}
+          aria-label="Pause audio"
+        >
+          <span className="text-[clamp(4rem,14vw,12rem)] font-black uppercase leading-none tracking-[0.08em] text-white/90 [text-shadow:0_0_30px_rgba(0,0,0,0.5)]">
+            Pause
+          </span>
+        </button>
+      )}
     </main>
   );
 }
