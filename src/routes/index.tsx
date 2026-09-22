@@ -148,7 +148,7 @@ function Index() {
       </div>
       <SoundControls
         playing={playing}
-        onToggle={toggle}
+        onToggle={handleToggle}
         bpm={bpm}
         onBpmChange={setBpm}
         beat={beat}
