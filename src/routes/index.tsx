@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { playing, toggle, bpm, setBpm, activeColumn, beat, loading } =
+  const { playing, toggle, bpm, setBpm, activeColumn, beat, loading, audioContext } =
     useStepSequencer();
   const [sketchOn, setSketchOn] = useState(false);
   const [toneOn, setToneOn] = useState(false);
@@ -72,6 +72,7 @@ function Index() {
               height={(coverWidth * 427) / 825}
               hideControls
               audible={toneOn}
+              audioContext={audioContext}
             />
           </div>
         </div>

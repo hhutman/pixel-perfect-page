@@ -1,21 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import taiko from "@/assets/taiko.mp3.asset.json";
-import monster from "@/assets/monster.mp3.asset.json";
-import riser from "@/assets/riser.mp3.asset.json";
-import footsteps from "@/assets/footsteps.mp3.asset.json";
-import swoosh from "@/assets/swoosh.mp3.asset.json";
-import splash from "@/assets/splash.mp3.asset.json";
-import funny from "@/assets/funny.mp3.asset.json";
-
 // Column index -> sound URL. Order matches COLUMNS in CodeGrid.
+const audioUrl = (name: string) => `${import.meta.env.BASE_URL}audio/${name}`;
+
 export const COLUMN_SOUNDS = [
-  taiko.url,
-  monster.url,
-  riser.url,
-  footsteps.url,
-  swoosh.url,
-  splash.url,
-  funny.url,
+  audioUrl("taiko.mp3"),
+  audioUrl("monster.mp3"),
+  audioUrl("riser.mp3"),
+  audioUrl("footsteps.mp3"),
+  audioUrl("swoosh.mp3"),
+  audioUrl("splash.mp3"),
+  audioUrl("funny.mp3"),
 ];
 
 const BEATS_PER_BAR = 5; // 5/4
@@ -66,6 +60,7 @@ export function useStepSequencer() {
         COLUMN_SOUNDS.map(async (url) => {
           try {
             const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.arrayBuffer();
             return await ctx.decodeAudioData(data);
           } catch (err) {
@@ -146,5 +141,14 @@ export function useStepSequencer() {
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
-  return { playing, toggle, bpm, setBpm, activeColumn, beat, loading };
+  return {
+    playing,
+    toggle,
+    bpm,
+    setBpm,
+    activeColumn,
+    beat,
+    loading,
+    audioContext: ctxRef.current,
+  };
 }
