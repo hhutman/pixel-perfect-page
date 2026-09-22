@@ -8,6 +8,8 @@ type OscillatorSketchProps = {
   audible?: boolean;
   /** Peak gain multiplier for the tone. */
   volume?: number;
+  /** Audio session unlocked by the main Play button. */
+  audioContext?: AudioContext | null;
 };
 
 export function OscillatorSketch({
@@ -16,6 +18,7 @@ export function OscillatorSketch({
   hideControls = false,
   audible,
   volume = 0.4,
+  audioContext,
 }: OscillatorSketchProps) {
   const W = width;
   const H = height;
@@ -42,11 +45,10 @@ export function OscillatorSketch({
       if (cancelled || !hostRef.current) return;
 
       // Three sine partials driven with the Web Audio API.
-      const Ctor =
-        window.AudioContext ??
-        (window as unknown as { webkitAudioContext: typeof AudioContext })
-          .webkitAudioContext;
-      const ctx = new Ctor();
+      const Ctor = window.AudioContext ??
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ownsContext = !audioContext;
+      const ctx = audioContext ?? new Ctor();
       ctxRef.current = ctx;
       const base = 285;
       const gains = [0, 1, 2].map(() => ctx.createGain());
@@ -54,7 +56,8 @@ export function OscillatorSketch({
         const o = ctx.createOscillator();
         o.type = "sine";
         o.frequency.value = base * (i + 1);
-        const g = gains[i]!;
+         const g = gains[i];
+         if (!g) return o;
         g.gain.value = 0;
         o.connect(g).connect(ctx.destination);
         o.start();
@@ -83,16 +86,19 @@ export function OscillatorSketch({
           }
 
           for (let i = 0; i < amps.length; i++) {
-            amps[i]! += (targetAmps[i]! - amps[i]!) * 0.03;
-            const g = gains[i]!;
-            const level = soundRef.current ? amps[i]! * volumeRef.current : 0;
+             const amp = amps[i] ?? 0;
+             const target = targetAmps[i] ?? 0;
+             amps[i] = amp + (target - amp) * 0.03;
+             const g = gains[i];
+             if (!g) continue;
+             const level = soundRef.current ? (amps[i] ?? 0) * volumeRef.current : 0;
             g.gain.setTargetAtTime(level, ctx.currentTime, 0.03);
           }
 
           p.clear();
 
-          const colorvalue = 255 * amps[0]!;
-          const colorvalue2 = 255 * amps[1]!;
+           const colorvalue = 255 * (amps[0] ?? 0);
+           const colorvalue2 = 255 * (amps[1] ?? 0);
 
           p.ambientLight(40 + colorvalue * 0.15);
           p.directionalLight(137, 0, 0, 0, 0, -1);
@@ -110,7 +116,7 @@ export function OscillatorSketch({
       cleanup = () => {
         instance.remove();
         oscs.forEach((o) => o.stop());
-        void ctx.close();
+         if (ownsContext) void ctx.close();
       };
     })();
 
@@ -118,7 +124,7 @@ export function OscillatorSketch({
       cancelled = true;
       cleanup();
     };
-  }, [W, H]);
+  }, [W, H, audioContext]);
 
   return (
     <div className="flex flex-col items-center gap-5">
