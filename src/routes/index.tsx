@@ -29,9 +29,41 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const WORD_FADE_MS = 350;
+const INTERLUDE_SEC = 21;
+
 function Index() {
-  const { playing, toggle, bpm, setBpm, activeColumn, beat, loading, audioContext } =
-    useStepSequencer();
+  const {
+    playing,
+    toggle,
+    start,
+    stop,
+    playInterlude,
+    stopInterlude,
+    bpm,
+    setBpm,
+    activeColumn,
+    beat,
+    loading,
+    audioContext,
+  } = useStepSequencer();
+  const restartRef = useRef<number | null>(null);
+
+  const handleToggle = () => {
+    if (restartRef.current) {
+      window.clearTimeout(restartRef.current);
+      restartRef.current = null;
+    }
+    stopInterlude();
+    toggle();
+  };
+
+  useEffect(
+    () => () => {
+      if (restartRef.current) window.clearTimeout(restartRef.current);
+    },
+    [],
+  );
   const [sketchOn, setSketchOn] = useState(false);
   const [toneOn, setToneOn] = useState(false);
   const [showPause, setShowPause] = useState(false);
