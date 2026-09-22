@@ -109,6 +109,20 @@ function Index() {
         beat={beat}
         loading={loading}
       />
+      {showPause && (
+        <button
+          type="button"
+          onClick={handleBigPause}
+          className={`fixed inset-0 z-20 flex items-center justify-center transition-opacity duration-300 ${
+            pauseFading ? "opacity-0" : "opacity-100"
+          }`}
+          aria-label="Pause audio"
+        >
+          <span className="text-[clamp(4rem,14vw,12rem)] font-black uppercase leading-none tracking-[0.08em] text-white/90 [text-shadow:0_0_30px_rgba(0,0,0,0.5)]">
+            Pause
+          </span>
+        </button>
+      )}
     </main>
   );
 }
