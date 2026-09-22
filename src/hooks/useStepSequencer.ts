@@ -12,6 +12,8 @@ export const COLUMN_SOUNDS = [
   audioUrl("funny.mp3"),
 ];
 
+export const INTERLUDE_SOUND = audioUrl("ode-to-joy.mp3");
+
 const BEATS_PER_BAR = 5; // 5/4
 const LOOKAHEAD_MS = 25;
 const SCHEDULE_AHEAD = 0.15; // seconds
@@ -31,6 +33,8 @@ export function useStepSequencer() {
   const beatRef = useRef(0);
   const bpmRef = useRef(bpm);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const interludeBufferRef = useRef<AudioBuffer | null>(null);
+  const interludeSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
   bpmRef.current = bpm;
 
@@ -132,6 +136,50 @@ export function useStepSequencer() {
     }, LOOKAHEAD_MS);
   }, [getContext, loadBuffers]);
 
+  // Solo piano interlude: starts after `delaySec`, plays for `durationSec`.
+  const playInterlude = useCallback(
+    async (delaySec: number, durationSec: number) => {
+      const ctx = getContext();
+      await ctx.resume();
+      if (!interludeBufferRef.current) {
+        try {
+          const res = await fetch(INTERLUDE_SOUND);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          interludeBufferRef.current = await ctx.decodeAudioData(
+            await res.arrayBuffer(),
+          );
+        } catch (err) {
+          console.error("Could not load interlude", err);
+          return;
+        }
+      }
+      const buffer = interludeBufferRef.current;
+      if (!buffer) return;
+      const start = ctx.currentTime + Math.max(0, delaySec);
+      const dur = Math.min(durationSec, buffer.duration);
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.9, start);
+      gain.gain.setValueAtTime(0.9, start + Math.max(0, dur - 1));
+      gain.gain.linearRampToValueAtTime(0.0001, start + dur);
+      src.connect(gain).connect(masterRef.current ?? ctx.destination);
+      src.start(start);
+      src.stop(start + dur);
+      interludeSourceRef.current = src;
+    },
+    [getContext],
+  );
+
+  const stopInterlude = useCallback(() => {
+    try {
+      interludeSourceRef.current?.stop();
+    } catch {
+      /* already stopped */
+    }
+    interludeSourceRef.current = null;
+  }, []);
+
   const toggle = useCallback(() => {
     if (playing) stop();
     else void start();
@@ -144,6 +192,10 @@ export function useStepSequencer() {
   return {
     playing,
     toggle,
+    start,
+    stop,
+    playInterlude,
+    stopInterlude,
     bpm,
     setBpm,
     activeColumn,

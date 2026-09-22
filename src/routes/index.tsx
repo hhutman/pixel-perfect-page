@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CodeGrid } from "@/components/CodeGrid";
 import { SoundControls } from "@/components/SoundControls";
@@ -29,9 +29,41 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const WORD_FADE_MS = 350;
+const INTERLUDE_SEC = 21;
+
 function Index() {
-  const { playing, toggle, bpm, setBpm, activeColumn, beat, loading, audioContext } =
-    useStepSequencer();
+  const {
+    playing,
+    toggle,
+    start,
+    stop,
+    playInterlude,
+    stopInterlude,
+    bpm,
+    setBpm,
+    activeColumn,
+    beat,
+    loading,
+    audioContext,
+  } = useStepSequencer();
+  const restartRef = useRef<number | null>(null);
+
+  const handleToggle = () => {
+    if (restartRef.current) {
+      window.clearTimeout(restartRef.current);
+      restartRef.current = null;
+    }
+    stopInterlude();
+    toggle();
+  };
+
+  useEffect(
+    () => () => {
+      if (restartRef.current) window.clearTimeout(restartRef.current);
+    },
+    [],
+  );
   const [sketchOn, setSketchOn] = useState(false);
   const [toneOn, setToneOn] = useState(false);
   const [showPause, setShowPause] = useState(false);
@@ -75,8 +107,21 @@ function Index() {
 
   const handleBigPause = () => {
     setPauseFading(true);
-    window.setTimeout(() => setShowPause(false), 350);
-    toggle();
+    window.setTimeout(() => setShowPause(false), WORD_FADE_MS);
+    stop();
+
+    const beatSec = 60 / bpm;
+    const delaySec = WORD_FADE_MS / 1000 + beatSec * 2;
+    void playInterlude(delaySec, INTERLUDE_SEC);
+
+    if (restartRef.current) window.clearTimeout(restartRef.current);
+    restartRef.current = window.setTimeout(
+      () => {
+        restartRef.current = null;
+        void start();
+      },
+      (delaySec + INTERLUDE_SEC) * 1000,
+    );
   };
 
   // Canvas keeps a fixed 825:427 aspect; widen it so it covers the viewport.
@@ -103,7 +148,7 @@ function Index() {
       </div>
       <SoundControls
         playing={playing}
-        onToggle={toggle}
+        onToggle={handleToggle}
         bpm={bpm}
         onBpmChange={setBpm}
         beat={beat}
