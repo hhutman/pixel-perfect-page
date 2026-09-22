@@ -75,8 +75,21 @@ function Index() {
 
   const handleBigPause = () => {
     setPauseFading(true);
-    window.setTimeout(() => setShowPause(false), 350);
-    toggle();
+    window.setTimeout(() => setShowPause(false), WORD_FADE_MS);
+    stop();
+
+    const beatSec = 60 / bpm;
+    const delaySec = WORD_FADE_MS / 1000 + beatSec * 2;
+    void playInterlude(delaySec, INTERLUDE_SEC);
+
+    if (restartRef.current) window.clearTimeout(restartRef.current);
+    restartRef.current = window.setTimeout(
+      () => {
+        restartRef.current = null;
+        void start();
+      },
+      (delaySec + INTERLUDE_SEC) * 1000,
+    );
   };
 
   // Canvas keeps a fixed 825:427 aspect; widen it so it covers the viewport.
