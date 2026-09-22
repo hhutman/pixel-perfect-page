@@ -50,6 +50,8 @@ function Index() {
     if (!playing) {
       setSketchOn(false);
       setToneOn(false);
+      setShowPause(false);
+      setPauseFading(false);
       return;
     }
     const sketchTimer = window.setTimeout(() => setSketchOn(true), 15000);
@@ -59,6 +61,23 @@ function Index() {
       window.clearTimeout(toneTimer);
     };
   }, [playing]);
+
+  // Big block-letter PAUSE button appears 13s after the tone begins.
+  useEffect(() => {
+    if (!toneOn) {
+      setShowPause(false);
+      setPauseFading(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setShowPause(true), 13000);
+    return () => window.clearTimeout(timer);
+  }, [toneOn]);
+
+  const handleBigPause = () => {
+    setPauseFading(true);
+    window.setTimeout(() => setShowPause(false), 350);
+    toggle();
+  };
 
   // Canvas keeps a fixed 825:427 aspect; widen it so it covers the viewport.
   const coverWidth = Math.max(size.w, (size.h * 825) / 427);
