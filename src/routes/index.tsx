@@ -34,6 +34,8 @@ function Index() {
     useStepSequencer();
   const [sketchOn, setSketchOn] = useState(false);
   const [toneOn, setToneOn] = useState(false);
+  const [showPause, setShowPause] = useState(false);
+  const [pauseFading, setPauseFading] = useState(false);
   const [size, setSize] = useState({ w: 1280, h: 800 });
 
   useEffect(() => {
