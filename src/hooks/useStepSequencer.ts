@@ -12,6 +12,8 @@ export const COLUMN_SOUNDS = [
   audioUrl("funny.mp3"),
 ];
 
+export const INTERLUDE_SOUND = audioUrl("ode-to-joy.mp3");
+
 const BEATS_PER_BAR = 5; // 5/4
 const LOOKAHEAD_MS = 25;
 const SCHEDULE_AHEAD = 0.15; // seconds
