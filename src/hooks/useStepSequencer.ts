@@ -192,6 +192,10 @@ export function useStepSequencer() {
   return {
     playing,
     toggle,
+    start,
+    stop,
+    playInterlude,
+    stopInterlude,
     bpm,
     setBpm,
     activeColumn,
